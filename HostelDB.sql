@@ -26,3 +26,71 @@ VALUES
   (NULL, 'Peace Haven', 'Mukono Central', 160000, 1.2, 'Water,Furnished', 0.3195, 32.7400); 
 
 Select * from hostels;
+
+ALTER TABLE users ADD COLUMN role ENUM('student', 'landlord', 'admin') NOT NULL DEFAULT 'student' ;
+SELECT * FROM users;
+
+CREATE TABLE messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sender_id INT NOT NULL,
+  receiver_id INT NOT NULL,
+  hostel_id INT NOT NULL,
+  content TEXT NOT NULL,
+  sent_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (hostel_id) REFERENCES hostels(id) ON DELETE CASCADE
+);
+
+Desc messages;
+
+ALTER TABLE users
+ADD COLUMN username VARCHAR(50) NOT NULL,
+ADD COLUMN contact VARCHAR(20) NOT NULL;
+desc users;
+
+RENAME TABLE hostels TO Hostels;
+ALTER TABLE Hostels
+ADD COLUMN address_location VARCHAR(255) NOT NULL,
+ADD COLUMN contact VARCHAR(20) NOT NULL;
+desc hostels;
+
+CREATE TABLE Image(
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    image_url VARCHAR(255) NOT NULL,
+    image_format VARCHAR(50) NOT NULL
+);
+show tables;
+
+CREATE TABLE Booking (
+  booking_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  hostel_id INT,
+  contact VARCHAR(20) NOT NULL,
+  email_address VARCHAR(255) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (hostel_id) REFERENCES Hostels(id) ON DELETE CASCADE
+);
+
+CREATE TABLE RoomCategory (
+  room_id INT AUTO_INCREMENT PRIMARY KEY,
+  hostel_id INT,
+  room_type ENUM('single', 'double') NOT NULL,
+  FOREIGN KEY (hostel_id) REFERENCES Hostels(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Review (
+  review_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  hostel_id INT,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (hostel_id) REFERENCES Hostels(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Notification (
+  notification_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+show tables;
