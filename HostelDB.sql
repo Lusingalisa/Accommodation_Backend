@@ -111,3 +111,6 @@ SET contact = 0701509906
 WHERE id=1;
 
 SELECT id, email, role FROM users WHERE id = 1;
+desc booking;
+
+desc messages;

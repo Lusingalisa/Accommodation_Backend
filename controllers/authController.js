@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
 exports.register = async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
+  const { email, password, username, contact} = req.body;
+  if (!email || !password || !username || !contact || typeof email !== 'string' || typeof password !== 'string' || typeof username !== 'string' || typeof contact !=='string') {
     return res.status(400).json({ message: 'Invalid email or password' });
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -17,9 +17,9 @@ exports.register = async (req, res) => {
     const [existing] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
     if (existing.length) return res.status(400).json({ message: 'Email already exists' });
     const hashedPassword = await bcrypt.hash(password, 10);
-    const [result] = await db.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hashedPassword]);
-    const token = jwt.sign({ id: result.insertId, email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, user: { id: result.insertId, email } });
+    const [result] = await db.query('INSERT INTO users (email, password, username, contact) VALUES (?, ?, ?, ?)', [email, hashedPassword, username, contact]);
+    const token = jwt.sign({ id: result.insertId, email , username, contact}, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token, user: { id: result.insertId, email , username, contact} });
   } catch (err) {
     console.error('Register error:', err.message);
     res.status(500).json({ message: 'Server error' });
