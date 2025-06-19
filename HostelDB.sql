@@ -94,3 +94,20 @@ CREATE TABLE Notification (
 );
 
 show tables;
+
+desc users;
+UPDATE users
+SET role ='admin'
+WHERE id =1;
+
+SELECT * FROM users;
+
+UPDATE users
+SET username = 'lisa'
+WHERE id=1;
+
+UPDATE users
+SET contact = 0701509906
+WHERE id=1;
+
+SELECT id, email, role FROM users WHERE id = 1;
